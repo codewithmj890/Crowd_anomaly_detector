@@ -1,273 +1,260 @@
-# AI-Based Public Safety Monitoring & Risk Detection System
+# AI-Based Public Safety Monitoring & Risk Detection System  
+*(Prototype / Proof of Concept)*
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
-[![OpenCV](https://img.shields.io/badge/OpenCV-4.0+-green.svg)](https://opencv.org)
-[![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.0+-orange.svg)](https://scikit-learn.org)
-[![License](https://img.shields.io/badge/License-MIT-red.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)]()
-
-> **An ethical, explainable AI system that monitors crowd behavior in real-time to detect abnormal activities and prevent safety incidents in public spaces.**
+![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
+![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green.svg)
+![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.x-orange.svg)
+![Status](https://img.shields.io/badge/Status-Prototype-yellow.svg)
 
 ---
 
-## Problem Statement
+## 📌 Project Overview
 
-Crowded public places such as **metro stations**, **markets**, and **festivals** are vulnerable to sudden safety incidents like panic, stampedes, or abnormal crowd movement. Current surveillance systems face critical limitations:
+Crowded public environments such as **metro stations**, **markets**, and **festivals** are vulnerable to sudden safety incidents like panic, stampedes, or abnormal crowd movement. Traditional CCTV monitoring relies heavily on human attention, which is slow, error-prone, and difficult to scale.
 
-- **Manual CCTV monitoring is slow**
-- **High dependency on human attention**  
-- **Prone to missed incidents**
-- **Not scalable across multiple camera feeds**
+This project presents a **research prototype** that demonstrates how **computer vision and machine learning** can be used to analyze **crowd-level motion patterns** from video and detect **abnormal crowd behavior**, generating **event-based safety alerts**.
 
-### Our Solution
-
-An **automated AI-driven system** that analyzes crowd-level motion patterns in video to detect abnormal behavior and generate interpretable safety alerts in **near real-time**.
+> ⚠️ This is a **prototype / proof of concept**, not a production deployment.
 
 ---
 
-## Ethical AI Compliance
+## 🎯 Problem Statement
 
-This system is designed with **privacy-first** principles:
+Current surveillance systems face several challenges:
 
-| Feature | Status | Description |
-|---------|--------|-------------|
-| Individual Tracking | **Disabled** | No person identification |
-| Face Recognition | **Disabled** | No facial data processing |
-| Biometric Storage | **Disabled** | No personal data stored |
-| Analysis Level | **Crowd-only** | Aggregate behavior analysis |
-| Compliance | **Fully Compliant** | Ethical AI guidelines followed |
+- Manual monitoring is slow
+- Human operators may miss early warning signs
+- Difficult to scale across many cameras
+- Lack of automated, explainable alerts
 
 ---
 
-## Dataset & Methodology
+## 💡 Proposed Solution
 
-### Dataset Information
-- **Source**: University of Minnesota (UMN Crowd Activity Dataset)
-- **Type**: Pre-recorded surveillance-style videos
-- **Content**: Normal crowd walking + Abnormal panic/running behavior
-- **Processing**: MP4 format, 15 FPS normalization
-
-### Feature Extraction: Dense Optical Flow
-We use the **Farneback method** for motion analysis:
-
-```python
-# Key advantages of our approach
-• Captures collective crowd motion
-• Does not identify individuals  
-• Computationally efficient for CPU systems
-```
-
-**Extracted Features per Frame:**
-- `mean_motion_magnitude` → Overall crowd movement intensity
-- `variance_of_motion_magnitude` → Instability/chaos in crowd motion
+A **logic-driven AI prototype** that:
+- Analyzes **crowd motion only** (no individuals)
+- Detects **abnormal collective behavior**
+- Predicts **future risk** using temporal modeling
+- Generates **event-based alerts** with explanations
 
 ---
 
-## Machine Learning Pipeline
+## ⚖️ Ethical AI Compliance
 
-### 1. **Weakly Supervised Learning**
-- **Method**: Percentile-based thresholding
-- **Reason**: Manual annotation is expensive and time-consuming
-- **Labels Generated**:
-- **Normal Alert**: Low motion, stable crowd
-  - **Medium Alert**: Moderate motion, potential risk  
-  - **High Alert**: High motion, abnormal behavior
+This system strictly follows privacy-first principles:
 
-### 2. **Temporal Modeling & Leakage Prevention**
-- **Issue Addressed**: Label leakage in time-series data
-- **Solution**: Future-frame prediction (shift labels by 1 frame)
-- **Benefit**: Ensures honest evaluation and real-world applicability
-
-### 3. **Model Architecture**
-- **Algorithm**: Random Forest Classifier
-- **Input Features**: `[mean_motion, variance_motion]`
-- **Target**: `future_high_alert`
-- **Rationale**: Better interpretability + Lower data requirements
+| Aspect | Status |
+|------|-------|
+| Face recognition | ❌ Not used |
+| Individual tracking | ❌ Not used |
+| Biometric data | ❌ Not stored |
+| Analysis level | ✅ Crowd-level only |
 
 ---
 
-## Decision Logic Optimization
+## 📂 Dataset
 
-### Safety-First Design Philosophy
-**Recall > Precision** → Better to have false alarms than miss critical events
+**UMN Crowd Activity Dataset**
+- Source: University of Minnesota
+- Type: Pre-recorded surveillance-style videos
+- Content:
+  - Normal crowd walking
+  - Abnormal panic / running behavior
 
-| Technique | Implementation | Impact |
-|-----------|----------------|---------|
-| **Probability Threshold Tuning** | Lowered from 0.5 → 0.4 | Increased Sensitivity |
-| **Temporal OR Smoothing** | 3-frame sliding window | Reduced Noise, Improved Event capture |
-
----
-
-## Intelligent Alert System
-
-### Event-Based Alerts (Not Frame-Based)
-**Prevents alert flooding** and improves interpretability
-
-```
-ABNORMAL CROWD ACTIVITY DETECTED
-Time Range : 00:03:49 → 00:03:50
-Frame Range: 3446 → 3452  
-Risk Level : HIGH
-Cause      : Sustained abnormal crowd behavior
-```
+**Video used:**
+- `Crowd-Activity-All.avi`
+- Converted to `crowd_15fps.mp4` (15 FPS)
 
 ---
 
-## Performance Metrics
+## 🧠 System Workflow
 
-### Confusion Matrix Results
-```
-                 Predicted
-                Normal  Abnormal
-Actual Normal    593     176
-    Abnormal      19     373
-```
+The project is implemented as a **multi-stage offline pipeline**:
 
-### Key Performance Indicators
-
-| Metric | Value | Interpretation |
-|--------|-------|----------------|
-| **Accuracy** | 83.2% | Overall system correctness |
-| **Precision (Abnormal)** | 67.9% | Alert reliability |
-| **Recall (Abnormal)** | **95.2%** | Almost all dangerous events detected |
-| **F1-Score (Abnormal)** | 79.1% | Balanced performance |
-| **False Alert Rate** | 22.9% | Acceptable for safety systems |
-
-### Why These Metrics Matter
-- **High Recall (95.2%)**: Critical for safety - we catch almost all dangerous events
-- **Low False Negatives (19)**: Very few critical events are missed
-- **Moderate Precision**: Some false alerts are acceptable in safety-critical systems
+1. Motion feature extraction
+2. Dataset labeling (weak supervision)
+3. Temporal ML training
+4. Event-based alert generation
+5. Performance evaluation
 
 ---
 
-## Quick Start
+## 🔍 Motion Feature Extraction
 
-### Prerequisites
-```bash
-pip install opencv-python numpy pandas scikit-learn tqdm
+**Technique:** Dense Optical Flow (Farneback)
+
+Why optical flow?
+- Captures **collective motion**
+- Does not identify people
+- Computationally efficient on CPU
+
+**Extracted features per frame:**
+- `frame_id`
+- `mean_motion`
+- `variance_motion`
+
+These represent:
+- Overall crowd movement intensity
+- Instability / chaos in motion
+
+---
+
+## 🏷️ Weakly Supervised Labeling
+
+Manual annotation is avoided using **data-driven rules**:
+
+Percentile thresholds on `mean_motion`:
+- Below 60th percentile → Normal
+- 60th–85th percentile → Medium risk
+- Above 85th percentile → High risk (abnormal)
+
+Generated labels include:
+- `normal_activity`
+- `abnormal_activity`
+- `normal_alert`
+- `medium_alert`
+- `high_alert`
+
+---
+
+## ⏱️ Temporal Modeling & Leakage Prevention
+
+To avoid data leakage:
+- The model predicts **future abnormal behavior**
+- `high_alert` is shifted by **one frame ahead**
+- Ensures honest evaluation on time-series data
+
+Target variable:
+- `future_high_alert`
+
+---
+
+## 🤖 Machine Learning Model
+
+- Algorithm: **Random Forest Classifier**
+- Features:
+  - Mean motion
+  - Motion variance
+- Output:
+  - Binary prediction of future abnormal behavior
+
+**Why supervised learning?**
+- Limited dataset size
+- Better interpretability
+- Lower data requirements than deep learning
+
+---
+
+## 🧠 Decision Logic (Safety-First)
+
+Public safety systems prioritize **recall over precision**.
+
+Implemented strategies:
+- Lower probability threshold (0.4)
+- Temporal OR smoothing (3-frame window)
+
+This reduces missed dangerous events while controlling noise.
+
+---
+
+## 🚨 Event-Based Alert Generation
+
+Instead of frame-by-frame alerts, consecutive abnormal frames are grouped into **events**.
+
+Each alert reports:
+- Start & end timestamp
+- Frame range
+- Risk level
+- Human-readable cause
+
+**Example:**
 ```
-
-### Run the Pipeline
-```bash
-python final_pipeline.py
-```
-
-### Expected Output
-```
-Extracting optical flow features...
-Generating rule-based labels...
-
-ALERTS
-------------------------
 ABNORMAL CROWD ACTIVITY DETECTED
 Time Range : 00:03:49 → 00:03:50
 Frame Range: 3446 → 3452
 Risk Level : HIGH
-Cause      : Sustained abnormal crowd behavior
-
-PERFORMANCE METRICS SUMMARY
-===============================================
-Recall (Abnormal)    0.95    Ability to catch danger
-False Alert Rate     22.90%  Normal events flagged
-===============================================
-
-Pipeline execution completed successfully.
+Cause : Sustained abnormal crowd behavior
 ```
 
 ---
 
-## System Architecture
+## 📊 Performance Evaluation
 
-```mermaid
-graph LR
-    A[Video Input] --> B[Optical Flow]
-    B --> C[Motion Features]
-    C --> D[Rule-based Labels]
-    D --> E[Random Forest]
-    E --> F[Temporal Smoothing]
-    F --> G[Alert Generation]
-    G --> H[Safety Dashboard]
+### Confusion Matrix
+
+| | Predicted Normal | Predicted Abnormal |
+|--|--|--|
+| Actual Normal | 593 | 176 |
+| Actual Abnormal | 19 | 373 |
+
+### Key Metrics (Abnormal Class)
+
+| Metric | Value |
+|------|------|
+| Accuracy | 83% |
+| Precision | 0.68 |
+| Recall | **0.95** |
+| F1-score | 0.79 |
+| False Alert Rate | 22.9% |
+
+**Interpretation:**
+- Very high recall ensures most dangerous events are detected
+- Some false alerts are acceptable in safety contexts
+
+---
+
+## ▶️ How to Run
+
+### Step 1: Extract motion features
+```bash
+python extract_motion.py
+```
+
+### Step 2: Convert features to labeled CSV
+```bash
+python numpy_to_csv.py
+```
+
+### Step 3: Run the ML pipeline
+```bash
+python final_pipeline.py
 ```
 
 ---
 
-## Future Enhancements
-
-### Short-term (Next 3 months)
-- [ ] Minimum-duration filtering for noise reduction
-- [ ] Confidence score assignment to alerts
-- [ ] Improved alert severity scaling
-
-### Medium-term (6-12 months)  
-- [ ] Crowd density estimation
-- [ ] Multi-camera fusion capabilities
-- [ ] Adaptive thresholding based on environment
-
-### Long-term (1+ years)
-- [ ] Real-time deployment on live CCTV feeds
-- [ ] Operator dashboard with visualization
-- [ ] Integration with emergency response systems
-
----
-
-## Project Structure
-
+## 📁 Project Structure
 ```
 crowd-dataset/
-├── final_pipeline.py          # Main production pipeline
-├── crowd_15fps.mp4            # Input video data
-├── labeled_motion_features.csv # Generated features
-├── README.md                  # This file
-└── requirements.txt           # Dependencies
+├── extract_motion.py
+├── numpy_to_csv.py
+├── final_pipeline.py
+├── crowd_15fps.mp4
+├── motion_features.npy
+├── labeled_motion_features.csv
+├── README.md
 ```
 
 ---
 
-## Key Achievements
+## 🚀 Future Enhancements (Post-Selection)
 
-- **End-to-end pipeline completed**  
-- **Leakage-free evaluation validated**  
-- **CPU-based deployment ready**  
-- **Ethical AI compliance maintained**  
-- **Safety-first design philosophy**  
-- **Real-world applicability demonstrated**
-
----
-
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+- Minimum-duration filtering to remove very short spikes
+- Confidence scores for alerts
+- Crowd density estimation
+- Multi-camera fusion
+- Live CCTV stream integration
+- Operator dashboard visualization
 
 ---
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 👨‍💻 Author
+## 👨💻 Author
 
 **Mrityunjay Singh**  
-*AI/ML Engineer specializing in Computer Vision & Public Safety Systems*
+AI / ML Engineer  
+Computer Vision & Public Safety Systems
 
 ---
 
-## 🙏 Acknowledgments
+## 🏁 Conclusion
 
-- University of Minnesota for the UMN Crowd Activity Dataset
-- OpenCV community for optical flow implementations
-- Scikit-learn team for machine learning tools
-
----
-
-<div align="center">
-
-**Built for Public Safety**
-
-*Making crowded spaces safer through ethical AI*
-
-</div>
-=======
-
->>>>>>> 5c7e829801b19904ecbe43b9023f88cf0252ab95
+This prototype demonstrates how ethical AI, classical computer vision, and machine learning can be combined to build an explainable crowd safety monitoring system. The project focuses on correctness, transparency, and safety rather than over-automation, making it suitable for further research and development.
